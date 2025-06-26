@@ -30,7 +30,7 @@ class Language extends Model
             if ($model->is_default) {
                 static::query()->where('id', '!=', $model->id)->update(['is_default' => false]);
             }
-            if ($model->is_frontend_active && !$model->is_admin_active) {
+            if ($model->is_frontend_active && ! $model->is_admin_active) {
                 static::query()->where('id', '!=', $model->id)->update(['is_admin_active' => true]);
             }
         });

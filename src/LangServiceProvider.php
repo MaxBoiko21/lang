@@ -2,8 +2,8 @@
 
 namespace SmartCms\Lang;
 
-use Illuminate\Routing\Router;
 use Illuminate\Routing\Route;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route as FacadesRoute;
 use SmartCms\Lang\Middlewares\Lang;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
@@ -32,12 +32,12 @@ class LangServiceProvider extends PackageServiceProvider
     {
         $this->registerMiddleware();
         $this->app->singleton(Languages::class, function ($app) {
-            return new Languages();
+            return new Languages;
         });
         $this->app->alias(Languages::class, 'lang');
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../database/seeders/LanguageSeeder.php' => database_path('seeders/LanguageSeeder.php'),
+                __DIR__.'/../database/seeders/LanguageSeeder.php' => database_path('seeders/LanguageSeeder.php'),
             ], 'language-seeder');
         }
     }
@@ -48,12 +48,11 @@ class LangServiceProvider extends PackageServiceProvider
         $router->aliasMiddleware('lang', Lang::class);
         Route::macro('multilingual', function () {
             /** @var \Illuminate\Routing\Route $this */
-
             $uri = $this->uri();
             $cleanUri = ltrim($uri, '/');
             FacadesRoute::addRoute(
                 $this->methods(),
-                '{lang}/' . $cleanUri,
+                '{lang}/'.$cleanUri,
                 $this->getAction()
             )->where('lang', '[a-z]{2}')->name('.lang')->middleware('lang');
 

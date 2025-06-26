@@ -100,7 +100,8 @@ class Languages
 
         return $this->frontLanguages()->mapWithKeys(function ($locale) use ($routeName, $params) {
             $routeName = str_replace('.lang', '', $routeName);
-            return [$locale->slug => route($routeName . '.lang', array_merge($params, ['lang' => $locale->slug]))];
+
+            return [$locale->slug => route($routeName.'.lang', array_merge($params, ['lang' => $locale->slug]))];
         })->toArray();
     }
 }

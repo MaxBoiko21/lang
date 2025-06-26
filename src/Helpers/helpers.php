@@ -12,7 +12,7 @@ if (! function_exists('tRoute')) {
         }
         $params = array_merge($params, ['lang' => current_lang()]);
         if (! str_contains($name, 'lang')) {
-            $name = $name . '.lang';
+            $name = $name.'.lang';
         }
 
         return route($name, $params);

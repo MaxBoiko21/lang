@@ -19,7 +19,6 @@ class Lang
      * Handles the request.
      *
      * @param  Request  $request  The request to handle.
-     * @return \Illuminate\Http\Response
      */
     public function handle(Request $request, Closure $next): Response
     {
