@@ -12,7 +12,7 @@ if (! function_exists('tRoute')) {
         }
         $params = array_merge($params, ['lang' => current_lang()]);
         if (! str_contains($name, 'lang')) {
-            $name = $name.'.lang';
+            $name = $name . '.lang';
         }
 
         return route($name, $params);
@@ -46,7 +46,7 @@ if (! function_exists('main_lang_id')) {
 if (! function_exists('get_active_languages')) {
     function get_active_languages(): Collection
     {
-        return app('lang')->adminAvailable();
+        return app('lang')->adminLanguages();
     }
 }
 if (! function_exists('lang')) {
