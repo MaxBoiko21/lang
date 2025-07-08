@@ -20,7 +20,7 @@ class Lang
      *
      * @param  Request  $request  The request to handle.
      */
-    public function handle(Request $request, Closure $next): Response | JsonResponse
+    public function handle(Request $request, Closure $next): Response|JsonResponse
     {
         $source = $request->path();
         if ($request->path() == 'livewire/update') {
@@ -45,6 +45,7 @@ class Lang
                 app('lang')->setCurrent($lang->slug);
             }
         }
+
         return $next($request);
     }
 }
