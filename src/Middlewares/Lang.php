@@ -3,10 +3,10 @@
 namespace SmartCms\Lang\Middlewares;
 
 use Closure;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Context;
-use SmartCms\Lang\Models\Language;
 
 /**
  * Class Lang
@@ -20,13 +20,13 @@ class Lang
      *
      * @param  Request  $request  The request to handle.
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next): Response | JsonResponse
     {
         $source = $request->path();
         if ($request->path() == 'livewire/update') {
             $referer = $request->header('referer');
             if ($referer) {
-                $source = parse_url($referer);
+                $source = parse_url($referer)['path'] ?? url('/');
             }
         }
         $segments = explode('/', trim($source, '/'));
@@ -45,7 +45,6 @@ class Lang
                 app('lang')->setCurrent($lang->slug);
             }
         }
-
         return $next($request);
     }
 }
