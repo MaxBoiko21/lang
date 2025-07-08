@@ -77,7 +77,7 @@ class Languages
         return $this->languages;
     }
 
-    public function getBySlug(string $slug): Language
+    public function getBySlug(string $slug): ?Language
     {
         return $this->languages->where('slug', $slug)->first();
     }
