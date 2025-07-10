@@ -7,6 +7,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Context;
+use Illuminate\Http\RedirectResponse;
+use SmartCms\Lang\Models\Language;
 
 /**
  * Class Lang
@@ -20,7 +22,7 @@ class Lang
      *
      * @param  Request  $request  The request to handle.
      */
-    public function handle(Request $request, Closure $next): Response|JsonResponse
+    public function handle(Request $request, Closure $next): Response|JsonResponse|RedirectResponse
     {
         $source = $request->path();
         if ($request->path() == 'livewire/update') {
@@ -31,6 +33,7 @@ class Lang
         }
         $segments = explode('/', trim($source, '/'));
         if (count($segments) <= 0) {
+            $this->setLang(app('lang')->default());
             return $next($request);
         }
         $potentialLang = $segments[0];
@@ -40,12 +43,23 @@ class Lang
                 if (! app('lang')->isFrontendAvailable($lang->slug)) {
                     abort(404);
                 }
-                app()->setLocale($lang->locale);
-                Context::add('current_lang', $lang->slug);
-                app('lang')->setCurrent($lang->slug);
+                if ($lang->slug == current_lang()) {
+                    $url = $request->url();
+                    $url = str_replace('/' . $lang->slug, '', $url);
+                    return redirect($url, 301);
+                }
+                $this->setLang($lang);
+                return $next($request);
             }
         }
-
+        $this->setLang(app('lang')->default());
         return $next($request);
+    }
+
+    public function setLang(Language $lang): void
+    {
+        app()->setLocale($lang->slug);
+        Context::add('current_lang', $lang->slug);
+        app('lang')->setCurrent($lang->slug);
     }
 }
