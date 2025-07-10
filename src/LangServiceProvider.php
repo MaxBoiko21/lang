@@ -37,7 +37,7 @@ class LangServiceProvider extends PackageServiceProvider
         $this->app->alias(Languages::class, 'lang');
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../database/seeders/LanguageSeeder.php' => database_path('seeders/LanguageSeeder.php'),
+                __DIR__.'/../database/seeders/LanguageSeeder.php' => database_path('seeders/LanguageSeeder.php'),
             ], 'language-seeder');
         }
     }
@@ -50,12 +50,12 @@ class LangServiceProvider extends PackageServiceProvider
             /** @var \Illuminate\Routing\Route $this */
             $uri = $this->uri();
             $cleanUri = ltrim($uri, '/');
-            $actions = array_filter($this->getAction(), fn($key) => $key != 'as', ARRAY_FILTER_USE_KEY);
+            $actions = array_filter($this->getAction(), fn ($key) => $key != 'as', ARRAY_FILTER_USE_KEY);
             FacadesRoute::addRoute(
                 $this->methods(),
-                '{lang}/' . $cleanUri,
+                '{lang}/'.$cleanUri,
                 $actions
-            )->where('lang', '[a-z]{2}')->name($this->getName() . '.lang')->middleware('lang');
+            )->where('lang', '[a-z]{2}')->name($this->getName().'.lang')->middleware('lang');
 
             return $this->middleware('lang');
         });

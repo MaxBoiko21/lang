@@ -4,10 +4,10 @@ namespace SmartCms\Lang\Middlewares;
 
 use Closure;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Context;
-use Illuminate\Http\RedirectResponse;
 use SmartCms\Lang\Models\Language;
 
 /**
@@ -34,6 +34,7 @@ class Lang
         $segments = explode('/', trim($source, '/'));
         if (count($segments) <= 0) {
             $this->setLang(app('lang')->default());
+
             return $next($request);
         }
         $potentialLang = $segments[0];
@@ -45,14 +46,17 @@ class Lang
                 }
                 if ($lang->slug == current_lang()) {
                     $url = $request->url();
-                    $url = str_replace('/' . $lang->slug, '', $url);
+                    $url = str_replace('/'.$lang->slug, '', $url);
+
                     return redirect($url, 301);
                 }
                 $this->setLang($lang);
+
                 return $next($request);
             }
         }
         $this->setLang(app('lang')->default());
+
         return $next($request);
     }
 
